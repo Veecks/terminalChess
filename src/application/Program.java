@@ -2,9 +2,11 @@ package application;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import chess.ChessException;
 import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.ChessPosition;
@@ -37,11 +39,20 @@ public class Program {
 				if(capturedPiece != null)
 					capturedList.add(capturedPiece);
 			}
-			catch(RuntimeException e) {
+			catch(ChessException e) {
 				System.out.println("Error: " + e.getMessage());
 				System.out.println("Press Enter to continue.");
 				sc.nextLine();
 				continue mainLoop;
+			}catch(InputMismatchException e) {
+				System.out.println("InputError: " + e.getLocalizedMessage());
+				System.out.println("Press Enter to continue.");
+				sc.nextLine();
+			}
+			catch(RuntimeException e) {
+				System.out.println("InputError: " + e.getLocalizedMessage());
+				System.out.println("Press Enter to continue.");
+				sc.nextLine();
 			}
 			finally{
 				System.out.println();

@@ -38,7 +38,8 @@ public class UI {
 			char column = s.charAt(0);
 			int row = Integer.parseInt(s.substring(1));
 			return new ChessPosition(column, row);
-		} catch (RuntimeException e) {
+		}
+		catch (RuntimeException e) {
 			throw new InputMismatchException("Error reading chess position: " + e.getMessage());
 		}
 	}
@@ -48,6 +49,10 @@ public class UI {
 		System.out.println();
 		printCapturedPieces(captured);
 		System.out.print("Turn: " + match.getTurn() + " - " + match.getCurrentPlayer());
+		System.out.println();
+		
+		if(match.getCheck())
+			System.out.println("CHECK!");
 	}
 	
 	public static void printBoard(ChessPiece[][] pieces) {
