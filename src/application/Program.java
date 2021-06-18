@@ -21,15 +21,15 @@ public class Program {
 		ChessMatch chessMatch = new ChessMatch();
 		List<ChessPiece> capturedList = new ArrayList<>();
 		
-		mainLoop: while(true) {
+		mainLoop: while(!chessMatch.getCheckMate()) {
 			try{
-				clearConsole();
+				UI.clearConsole();
 				UI.printChessMatch(chessMatch, capturedList);
 				System.out.println();
 				System.out.print("Source: ");
 				ChessPosition source = UI.readChessPosition(sc);
 				
-				clearConsole();
+				UI.clearConsole();
 				UI.printBoard(chessMatch.getPieces(),chessMatch.PossibleMovesOf(source));
 				
 				System.out.print("\nTarget: ");
@@ -58,24 +58,7 @@ public class Program {
 				System.out.println();
 			}
 		}
+		UI.clearConsole();
+		UI.printChessMatch(chessMatch, capturedList);
 	}
-	
-	// https://stackoverflow.com/questions/2979383/java-clear-the-consolepublic
-	private final static void clearConsole()
-	{
-	    try
-	    {
-	        if (System.getProperty("os.name").contains("Windows"))
-	            new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-	        else
-	        	System.out.print("\033[H\033[2J");
-
-	    }
-	    catch (final Exception e)
-	    {
-	        System.out.println("Error clearing the console: " + e.getMessage());
-	    }
-	}
-
-
 }

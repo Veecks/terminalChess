@@ -38,8 +38,7 @@ public class UI {
 			char column = s.charAt(0);
 			int row = Integer.parseInt(s.substring(1));
 			return new ChessPosition(column, row);
-		}
-		catch (RuntimeException e) {
+		} catch (RuntimeException e) {
 			throw new InputMismatchException("Error reading chess position: " + e.getMessage());
 		}
 	}
@@ -48,13 +47,18 @@ public class UI {
 		printBoard(match.getPieces());
 		System.out.println();
 		printCapturedPieces(captured);
-		System.out.print("Turn: " + match.getTurn() + " - " + match.getCurrentPlayer());
-		System.out.println();
 		
-		if(match.getCheck())
-			System.out.println("CHECK!");
+		if(!match.getCheckMate()) {
+			System.out.println("Turn: " + match.getTurn() + " - " + match.getCurrentPlayer());
+			if (match.getCheck())
+				System.out.println("CHECK!");
+		}
+		else {
+			System.out.println("CHECKMATE!");
+			System.out.println("Winner: " + match.getCurrentPlayer());
+		}
 	}
-	
+
 	public static void printBoard(ChessPiece[][] pieces) {
 		for (int i = 0; i < pieces.length; i++) {
 			System.out.print(8 - i + " ");
@@ -78,24 +82,39 @@ public class UI {
 	}
 
 	private static void printPiece(ChessPiece piece, boolean bg) {
-		if(bg)
+		if (bg)
 			System.out.print(ANSI_BLUE_BACKGROUND);
 		if (piece == null)
 			System.out.print("-" + ANSI_RESET);
-		else if(piece.getColor() == Color.WHITE)
+		else if (piece.getColor() == Color.WHITE)
 			System.out.print(ANSI_YELLOW + piece + ANSI_RESET);
 		else
 			System.out.print(ANSI_PURPLE + piece + ANSI_RESET);
 		System.out.print(" ");
 	}
-	
+
 	private static void printCapturedPieces(List<ChessPiece> captured) {
-		List<ChessPiece> white = captured.stream().filter(x -> x.getColor() == Color.WHITE).collect(Collectors.toList());
-		List<ChessPiece> black = captured.stream().filter(x -> x.getColor() == Color.BLACK).collect(Collectors.toList());
+		List<ChessPiece> white = captured.stream().filter(x -> x.getColor() == Color.WHITE)
+				.collect(Collectors.toList());
+		List<ChessPiece> black = captured.stream().filter(x -> x.getColor() == Color.BLACK)
+				.collect(Collectors.toList());
 		System.out.println("Captured pieces:");
 		System.out.print(ANSI_YELLOW + "White: ");
 		System.out.println(Arrays.toString(white.toArray()) + ANSI_RESET);
 		System.out.print(ANSI_PURPLE + "Black: ");
 		System.out.println(Arrays.toString(black.toArray()) + ANSI_RESET);
+	}
+
+	// https://stackoverflow.com/questions/2979383/java-clear-the-consolepublic
+	protected final static void clearConsole() {
+		try {
+			if (System.getProperty("os.name").contains("Windows"))
+				new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+			else
+				System.out.print("\033[H\033[2J");
+
+		} catch (final Exception e) {
+			System.out.println("Error clearing the console: " + e.getMessage());
+		}
 	}
 }
