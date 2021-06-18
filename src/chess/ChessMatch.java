@@ -8,16 +8,31 @@ import chess.pieces.Rook;
 
 public class ChessMatch {
 	private Board board;
-//	private int turn;
-//	private Color currentPlayer;
+	private int turn;
+	private Color currentPlayer;
 //	private boolean check;
 //	private boolean checkMate;
 
 	public ChessMatch() {
 		board = new Board(8, 8);
+		turn = 1;
+		currentPlayer = Color.WHITE;
 		initialSetup();
 	}
 
+	public int getTurn() {
+		return turn;
+	}
+	
+	public Color getCurrentPlayer() {
+		return currentPlayer;
+	}
+	
+	private void nextTurn() {
+		turn++;
+		currentPlayer = (currentPlayer == Color.WHITE) ? Color.BLACK : Color.WHITE;
+	}
+	
 	public ChessPiece[][] getPieces() {
 		ChessPiece[][] aux = new ChessPiece[board.getRows()][board.getColumns()];
 		for (int i = 0; i < board.getRows(); i++) {
@@ -40,6 +55,7 @@ public class ChessMatch {
 		Position target = targetCPos.toPosition();
 		ValidateTargetPosition(source, target);
 		Piece capturedPiece = makeMove(source, target);
+		nextTurn();
 		return (ChessPiece) capturedPiece;
 	}
 
@@ -55,6 +71,8 @@ public class ChessMatch {
 			throw new ChessException("There is not a piece in source position.");
 		if(!board.piece(pos).isThereAnyPossibleMove())
 			throw new ChessException("This piece has no possible moves.");
+		if(currentPlayer != ((ChessPiece)board.piece(pos)).getColor())
+			throw new ChessException("It is not " + ((ChessPiece)board.piece(pos)).getColor() + "'s turn now!");
 	}
 	
 	private void ValidateTargetPosition(Position source, Position target) {
