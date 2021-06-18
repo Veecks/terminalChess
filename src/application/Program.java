@@ -1,6 +1,8 @@
 package application;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import chess.ChessMatch;
@@ -15,11 +17,12 @@ public class Program {
 		System.out.println("Hello Chess!");
 		
 		ChessMatch chessMatch = new ChessMatch();
+		List<ChessPiece> capturedList = new ArrayList<>();
 		
 		mainLoop: while(true) {
 			try{
 				clearConsole();
-				UI.printChessMatch(chessMatch);
+				UI.printChessMatch(chessMatch, capturedList);
 				System.out.println();
 				System.out.print("Source: ");
 				ChessPosition source = UI.readChessPosition(sc);
@@ -30,6 +33,9 @@ public class Program {
 				System.out.print("\nTarget: ");
 				ChessPosition target = UI.readChessPosition(sc);
 				ChessPiece capturedPiece = chessMatch.performChessMove(source, target);
+				
+				if(capturedPiece != null)
+					capturedList.add(capturedPiece);
 			}
 			catch(RuntimeException e) {
 				System.out.println("Error: " + e.getMessage());

@@ -1,5 +1,8 @@
 package chess;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import boardgame.Board;
 import boardgame.Piece;
 import boardgame.Position;
@@ -10,6 +13,8 @@ public class ChessMatch {
 	private Board board;
 	private int turn;
 	private Color currentPlayer;
+	private List<Piece> activePieces = new ArrayList<>();
+	private List<Piece> capturedPieces = new ArrayList<>();
 //	private boolean check;
 //	private boolean checkMate;
 
@@ -61,8 +66,14 @@ public class ChessMatch {
 
 	private Piece makeMove(Position source, Position target) {
 		Piece p = board.removePiece(source);
-		Piece capturedPiece = (board.thereIsAPiece(target)) ? board.removePiece(target) : null;
+		Piece capturedPiece = board.removePiece(target);
 		board.placePiece(p, target);
+		
+		if(capturedPiece != null) {
+			activePieces.remove(capturedPiece);
+			capturedPieces.add(capturedPiece);
+		}
+			
 		return capturedPiece;
 	}
 
@@ -82,6 +93,7 @@ public class ChessMatch {
 
 	private void placeNewPiece(char column, int row, ChessPiece piece) {
 		board.placePiece(piece, new ChessPosition(column, row).toPosition());
+		activePieces.add(piece);
 	}
 
 	private void initialSetup() {
