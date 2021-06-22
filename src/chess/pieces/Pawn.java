@@ -2,13 +2,17 @@ package chess.pieces;
 
 import boardgame.Board;
 import boardgame.Position;
+import chess.ChessMatch;
 import chess.ChessPiece;
 import chess.Color;
 
 public class Pawn extends ChessPiece {
 
-	public Pawn(Board board, Color color) {
+	private ChessMatch match;
+	
+	public Pawn(Board board, Color color, ChessMatch match) {
 		super(board, color);
+		this.match = match;
 	}
 	
 	@Override
@@ -22,7 +26,7 @@ public class Pawn extends ChessPiece {
 		
 		Position p = new Position(0,0);
 		
-		//up or down?
+		//Black or White?
 		int i = (this.getColor() == Color.WHITE) ? -1 : 1;
 		
 		//vertical
@@ -45,6 +49,17 @@ public class Pawn extends ChessPiece {
 		p.setValues(this.pos.getRow()+i, this.pos.getColumn()-i);
 		if(getBoard().positionExists(p) && canAttack(p))
 			moves[p.getRow()][p.getColumn()] = true;
+		
+		//enPassant
+		if(this.pos.getRow() == 3.5 + 0.5 * i) {
+			Position left = new Position(this.pos.getRow(), this.pos.getColumn() - 1);
+			if(getBoard().positionExists(left) && isThereOpponentPiece(left) && getBoard().piece(left) == match.enPassantVulnerable())
+				moves[left.getRow() + i][left.getColumn()] = true;
+
+			Position right = new Position(this.pos.getRow(), this.pos.getColumn() + 1);
+			if(getBoard().positionExists(right) && isThereOpponentPiece(right) && getBoard().piece(right) == match.enPassantVulnerable())
+				moves[right.getRow() + i][right.getColumn()] = true;
+		}
 		
 		return moves;
 	}
