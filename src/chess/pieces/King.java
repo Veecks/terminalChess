@@ -84,13 +84,13 @@ public class King extends ChessPiece {
 		if(getBoard().positionExists(pos1)) {
 			ChessPiece rook = (ChessPiece)getBoard().piece(pos1);
 			if(rook instanceof Rook && this.getMoveCount() == 0 && rook.getMoveCount() == 0 && !match.getCheck())
-				moves[getPos().getRow()][getPos().getColumn()+2] = true;
+				moves[getPos().getRow()][getPos().getColumn() + 2] = true;
 		}
 		
 		if(getBoard().positionExists(pos2)) {
 			ChessPiece rook = (ChessPiece)getBoard().piece(pos2);
 			if(getBoard().positionExists(pos2) && rook instanceof Rook && this.getMoveCount() == 0 && rook.getMoveCount() == 0 && !match.getCheck())
-				moves[getPos().getRow()][getPos().getColumn()] = true;
+				moves[getPos().getRow()][getPos().getColumn() - 2] = true;
 		}
 	}
 }

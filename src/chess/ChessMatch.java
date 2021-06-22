@@ -167,8 +167,8 @@ public class ChessMatch {
 
 	private void initialSetup() {
 
-		placeNewPiece('g', 8, new Rook(board, Color.BLACK));
-		placeNewPiece('a', 8, new King(board, Color.BLACK, this));
+		placeNewPiece('a', 8, new Rook(board, Color.BLACK));
+		placeNewPiece('e', 8, new King(board, Color.BLACK, this));
 		placeNewPiece('f', 6, new Pawn(board, Color.BLACK));
 		placeNewPiece('f', 4, new Bishop(board, Color.BLACK));
 
