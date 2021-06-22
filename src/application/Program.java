@@ -38,6 +38,18 @@ public class Program {
 				
 				if(capturedPiece != null)
 					capturedList.add(capturedPiece);
+				
+				if(chessMatch.getPromoted() != null) {
+					System.out.print("\nEnter piece to promote (B/H/R/Q): ");
+					String selection = sc.nextLine().toUpperCase();
+					while(!selection.equals("Q") && !selection.equals("R") && !selection.equals("H") && !selection.equals("B")) {
+						System.out.print("\nInvalid input! Enter piece to promote (B/H/R/Q): ");
+						selection = sc.nextLine().toUpperCase();
+					}
+					chessMatch.replacePromotedPiece(selection);
+					chessMatch.testCheck(chessMatch.getCurrentPlayer());
+					chessMatch.testCheckMate(chessMatch.getCurrentPlayer());
+				}
 			}
 			catch(ChessException e) {
 				System.out.println("Error: " + e.getMessage());

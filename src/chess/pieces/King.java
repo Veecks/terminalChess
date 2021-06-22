@@ -83,14 +83,25 @@ public class King extends ChessPiece {
 		
 		if(getBoard().positionExists(pos1)) {
 			ChessPiece rook = (ChessPiece)getBoard().piece(pos1);
-			if(rook instanceof Rook && this.getMoveCount() == 0 && rook.getMoveCount() == 0 && !match.getCheck())
+			if(rook instanceof Rook && this.getMoveCount() == 0 && rook.getMoveCount() == 0 && isCastlePathFree(true) && !match.getCheck())
 				moves[getPos().getRow()][getPos().getColumn() + 2] = true;
 		}
 		
 		if(getBoard().positionExists(pos2)) {
 			ChessPiece rook = (ChessPiece)getBoard().piece(pos2);
-			if(getBoard().positionExists(pos2) && rook instanceof Rook && this.getMoveCount() == 0 && rook.getMoveCount() == 0 && !match.getCheck())
+			if(rook instanceof Rook && this.getMoveCount() == 0 && rook.getMoveCount() == 0 && isCastlePathFree(true) && !match.getCheck())
 				moves[getPos().getRow()][getPos().getColumn() - 2] = true;
 		}
+	}
+	
+	private boolean isCastlePathFree(boolean right) {
+		int i = right ? 1 : -1;
+		if(getBoard().piece(pos.getRow(), pos.getColumn() + i) == null && getBoard().piece(pos.getRow(), pos.getColumn() + 2*i) == null) {
+			if(right)
+				return true;
+			else if(getBoard().piece(pos.getRow(), pos.getColumn() - 3) == null)
+				return true;
+		}
+		return false;
 	}
 }
